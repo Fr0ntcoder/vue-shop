@@ -10,33 +10,25 @@
                         <router-link class="category-slide__title" tag="a" :to="{name: 'product-single',params: {category: item.category, id: item.id},query: {id: item.id}}">
                             {{item.title}}
                         </router-link>
-                        <div class="category-slide__stat">
-                            <ul class="category-slide__rating-list">
-                                <li class="category-slide__rating-item" v-for="(n,i) of 5" :key="i">
-                                    <i class="material-icons" v-if="n <= item.rating">star</i>
-                                    <i class="material-icons" v-else>star_border</i>
-                                </li>
-                            </ul>
-                            <span class="category-slide__reviews" v-if="item.reviews != '[]'">{{Object.values(item.reviews).length | filterText}}</span>
-                            <span class="category-slide__reviews" v-else>Нет отзывов</span>
-                        </div>
+                        <stat-info :reviews="item.reviews" />
                         <span class="category-slide__price">{{item.price | filterCurrency}}</span>
                         <button class="category-slide__add" @click.prevent="addProductCart(item)" v-if="!item.active">
-                            <span class="category-slide__add-text">Добавить в корзину <font-awesome-icon icon="shopping-cart"/></span>               
+                            Добавить в корзину <i class="material-icons">add_shopping_cart</i>              
                         </button>
                         <router-link to="/cart" tag="a" class="category-slide__add category-slide__add--modif" v-else>
-                            <span class="category-slide__add-text">Перейти в корзину <font-awesome-icon icon="shopping-cart"/></span>               
+                            Перейти в корзину <i class="material-icons">add_shopping_cart</i>              
                         </router-link>
                     </div>
                 </div>
             </div>
         </div>
-        <button class="category-slide__btn category-slide__btn-prev" @click.prevent="sliderPrev()"><font-awesome-icon icon="chevron-left" /></button>
-        <button class="category-slide__btn category-slide__btn-next" @click.prevent="sliderNext()"><font-awesome-icon icon="chevron-right" /></button>
+        <button class="category-slide__btn category-slide__btn-prev" @click.prevent="sliderPrev()"><i class="material-icons">keyboard_arrow_left</i></button>
+        <button class="category-slide__btn category-slide__btn-next" @click.prevent="sliderNext()"><i class="material-icons">keyboard_arrow_right</i></button>
     </div>
 </template>
 
 <script>
+import StatInfo from "@/components/Stat-info"
 import {mapGetters,mapActions} from "vuex"
 export default {
     props: {
@@ -50,6 +42,9 @@ export default {
             stepNext: 0,
             maxWidth: 0,
         }
+    },
+    components: {
+        StatInfo
     },
     computed: {
        ...mapGetters(["PRODUCTS","CART"]), 
@@ -65,7 +60,7 @@ export default {
                    return el;
                }
            })
-       }  
+       }, 
            
     },
     methods: {
@@ -95,7 +90,13 @@ export default {
             }else {
                 this.$refs.slideWrap.style.transform = `translate(-${this.maxWidth}px)`
             }
-        }
+        },
+        averageRating(arr) {
+            const sum = Object.values(arr).reduce((total,el) => {
+                return total + el.rating;
+            },0)
+            return Math.ceil(sum/Object.values(arr).length);
+        },
     },
     watch: {
     },
@@ -123,8 +124,8 @@ export default {
                 background: var(--bg-color);
                 color: #fff;
                 cursor: pointer;
-                & svg {
-                    margin-left: 15px;
+                & i {
+                    margin-left: 10px;
                 }
                 &.active {
                     background: red;
@@ -172,6 +173,9 @@ export default {
                 box-shadow: 0 0 2px 0 rgba(0,0,0,.5);  
                 z-index: 999;
                 cursor: pointer;
+                & i {
+                    font-size: 30px;
+                }
                 &-prev {
                     top: 50%;
                     left: 0;

@@ -3,18 +3,7 @@
         <div class="product-single__wrap">
             <div class="product-single__left">
                 <h3 class="product-single__title">{{getProduct.title}}</h3>
-                <div class="product-single__info">
-                    <ul class="product-single__info-list">
-                        <li class="product-single__info-item" v-for="n of 5" :key="n">
-                            <i class="material-icons" v-if="n <= averageRating">star</i>
-                            <i class="material-icons" v-else>star_border</i>
-                        </li>
-                    </ul>
-                    <div class="product-single__info-reviews">
-                        <span class="" v-if="getProduct.reviews != '[]'">{{Object.values(getProduct.reviews).length | filterText}}</span>
-                        <span v-else>Нет отзывов</span>
-                    </div>
-                </div>
+                <stat-info :reviews="getProduct.reviews" />
                 <div class="product-single__slider-wrap">
                     <div class="product-single__slider-top" :style="`background-image: url(${getImg})`">
                     </div>
@@ -100,6 +89,7 @@
 </template>
 
 <script>
+import StatInfo from "@/components/Stat-info"
 import {mapActions,mapGetters} from "vuex"
 export default {
     metaInfo() {
@@ -115,6 +105,9 @@ export default {
       slideWidth: 0,
       counterWidth: 0
     }),
+    components: {
+        StatInfo
+    },
     computed: {
       ...mapGetters(["PRODUCTS_ID","CART"]),
       getProduct() {

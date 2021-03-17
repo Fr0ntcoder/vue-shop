@@ -3,7 +3,7 @@
       <div class="container">
           <div class="header-top">
               <a href="#" class="header-location">
-                  <font-awesome-icon icon="map-marker-alt" />
+                  <i class="material-icons">room</i>
                   <span class="header-location__text">Омск</span>
               </a>
           </div>
@@ -13,17 +13,17 @@
                     <input type="search" class="header-search__input" placeholder="Поиск по каталогу" v-model="headerSearch">
                     <button class="header-search__btn" @click.prevent="headerSearchHandler">
                         <span class="header-search__btn-text">Найти</span>
-                        <font-awesome-icon icon="search" />
+                        <i class="material-icons">search</i>
                     </button>
                 </div>
                 <a href="#" class="header-register" @click.prevent="modalReg">
-                  <font-awesome-icon icon="user"/>
+                  <i class="material-icons">account_circle</i>
                   <span class="header-register__text">Вход или регистрация</span>
                 </a>
                 <router-link to="/cart" tag="a" class="header-cart" :class="{active: cartLength}">
                     <span class="header-cart__icon">
                         <span class="header-cart__counter" v-if="cartLength">{{cartLength}}</span>
-                        <font-awesome-icon icon="shopping-cart"/>
+                        <i class="material-icons">shopping_cart</i>
                     </span>
                     <span class="header-cart__text" v-if="cartLength">{{cartPrice | filterCurrency}}</span>
                     <span class="header-cart__text" v-else>Корзина</span>
@@ -333,8 +333,9 @@ export default {
         }
     }
     &-register {
-        display: block;
+        display: inline-flex;
         font-size: 14px;
+        align-items: center;
         transition: all 0.3s ease-in-out;
         color: #000;
         &__text {
@@ -345,9 +346,10 @@ export default {
         }
     }
     &-cart {
-        display: block;
+        display: inline-flex;
         font-size: 14px;
-        padding: 15px;
+        padding: 16px 15px;
+        align-items: center;
         border-radius: 5px;
         transition: all 0.3s ease-in-out;
         color: #000;
@@ -363,7 +365,8 @@ export default {
         }
         &__icon {
             position: relative;
-            & svg {
+            font-size: 20px;
+            & i {
                 font-size: 20px;
             }
         }

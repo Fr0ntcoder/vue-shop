@@ -6,7 +6,6 @@
                 <div class="category-sort__content">
                     <a href="#" class="category-sort__link" @click.prevent="sortUp">По возрастанию <i class="material-icons rotate">sort</i></a>
                     <a href="#" class="category-sort__link" @click.prevent="sortDown">По убыванию <i class="material-icons">sort</i></a>
-                    <a href="#" class="category-sort__link" @click.prevent="sortRating">По рейтингу</a>
                 </div>
             </div>
             <transition-group name="list" tag="ul" class="category-list" apper>
@@ -17,22 +16,13 @@
                         </span>
                         <div class="category-item__content">
                             <router-link class="category-item__title" tag="a" :to="{name: 'product-single',params: {category: item.category, id: item.id},query: {id: item.id}}">{{item.title}}</router-link>
-                            <div class="category-item__stat">
-                                <ul class="category-item__rating-list">
-                                    <li class="category-item__rating-item" v-for="(n,i) of 5" :key="i">
-                                        <i class="material-icons" v-if="n <= item.rating">star</i>
-                                        <i class="material-icons" v-else>star_border</i>
-                                    </li>
-                                </ul>
-                                <span class="category-item__reviews" v-if="item.reviews != '[]'">{{Object.values(item.reviews).length | filterText}}</span>
-                                <span class="category-item__reviews" v-else>Нет отзывов</span>
-                            </div>
+                            <stat-info :reviews="item.reviews" />
                             <span class="category-item__price">{{item.price | filterCurrency}}</span>
                             <button class="category-item__add" @click.prevent="addProductCart(item)" v-if="!item.active">
-                                <span class="category-item__add-text">Добавить в корзину <font-awesome-icon icon="shopping-cart"/></span>               
+                                Добавить в корзину <i class="material-icons">add_shopping_cart</i>               
                             </button>
                             <router-link to="/cart" tag="a" class="category-item__add category-item__add--modif" v-else>
-                                <span class="category-item__add-text">Перейти в корзину <font-awesome-icon icon="shopping-cart"/></span>               
+                                Перейти в корзину <i class="material-icons">add_shopping_cart</i>                
                             </router-link>
                         </div>
                     </div>
@@ -43,6 +33,7 @@
 </template>
 
 <script>
+import StatInfo from "@/components/Stat-info"
 import {mapGetters,mapActions} from "vuex"
 export default {
     name: "brand",
@@ -55,6 +46,9 @@ export default {
     data: ()=> ({
         
     }),
+    components: {
+        StatInfo
+    },
     computed: {
         ...mapGetters(["PRODUCTS","CART"]),
         productsFIlter() {
@@ -92,12 +86,7 @@ export default {
             this.PRODUCTS.sort((a,b) => {
                 return b.price - a.price
             })
-        },
-        sortRating() {
-            this.PRODUCTS.sort((a,b) => {
-                return b.rating - a.rating;
-            })
-        },
+        }
     },
     async mounted() {
         await this.GET_PRODUCTS()
@@ -165,6 +154,9 @@ export default {
                 background: var(--bg-color);
                 color: #fff;
                 cursor: pointer;
+                & i {
+                    margin-left: 10px;
+                }
                 &--modif {
                     background: red;
                 }
